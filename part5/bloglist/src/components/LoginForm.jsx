@@ -1,12 +1,12 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-import blogService from "../services/blogs";
-import loginService from "../services/login";
+import blogService from '../services/blogs';
+import loginService from '../services/login';
 
 const LoginForm = ({ setUser, setMessage, setMessageVariant }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleInputUsername = (e) => setUsername(e.target.value);
   const handleInputPassword = (e) => setPassword(e.target.value);
@@ -18,16 +18,16 @@ const LoginForm = ({ setUser, setMessage, setMessageVariant }) => {
 
     if (user) {
       setUser(user);
-      setUsername("");
-      setPassword("");
-      window.localStorage.setItem("user", JSON.stringify(user));
+      setUsername('');
+      setPassword('');
+      window.localStorage.setItem('user', JSON.stringify(user));
       blogService.setToken(user.token);
     } else {
-      setMessage("Wrong username or password");
-      setMessageVariant("error");
+      setMessage('Wrong username or password');
+      setMessageVariant('error');
       setTimeout(() => {
-        setMessage("");
-        setMessageVariant("");
+        setMessage('');
+        setMessageVariant('');
       }, 5000);
     }
   };
@@ -35,8 +35,9 @@ const LoginForm = ({ setUser, setMessage, setMessageVariant }) => {
   return (
     <form>
       <div>
-        <label>username</label>
+        <label htmlFor="username">Username</label>
         <input
+          id="username"
           type="text"
           name="username"
           value={username}
@@ -44,8 +45,9 @@ const LoginForm = ({ setUser, setMessage, setMessageVariant }) => {
         />
       </div>
       <div>
-        <label>password</label>
+        <label htmlFor="password">Password</label>
         <input
+          id="password"
           type="password"
           name="password"
           value={password}
@@ -53,7 +55,7 @@ const LoginForm = ({ setUser, setMessage, setMessageVariant }) => {
         />
       </div>
       <button type="submit" onClick={handleSubmit}>
-        login
+        Login
       </button>
     </form>
   );
