@@ -41,7 +41,7 @@ function App() {
     let newPersons = [...persons];
     const newId = persons.length + 1;
     const newPerson = {
-      id: newId,
+      id: newId.toString(),
       name: newName,
       number: newNumber,
     };
@@ -55,6 +55,17 @@ function App() {
         setNewNumber("");
       })
       .catch((error) => console.log(error));
+  };
+
+  const handleDeletePerson = (event, name, id) => {
+    event.preventDefault();
+
+    if (window.confirm(`Delete ${name}?`)) {
+      personService.deletePerson(id).then(() => {
+        const newPersons = [...persons].filter((i) => i.id !== id);
+        setPersons(newPersons);
+      }).catch(error => console.log(error));
+    }
   };
 
   const personsToShow = showAll
@@ -88,7 +99,7 @@ function App() {
         handleAddNewPerson={handleAddNewPerson}
       />
       <h3>Numbers</h3>
-      <Persons data={personsToShow} />
+      <Persons data={personsToShow} handleDelete={handleDeletePerson} />
     </>
   );
 }
