@@ -1,12 +1,12 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-import blogService from "../services/blogs";
+import blogService from '../services/blogs';
 
 const blogStyle = {
   paddingTop: 10,
   paddingLeft: 2,
-  border: "solid",
+  border: 'solid',
   borderWidth: 1,
   marginBottom: 5,
 };
@@ -27,11 +27,11 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle}>
-      <p>
+      <p className="title">
         {blog.title} {blog.author}
       </p>
       <button onClick={() => setIsVisible(!isVisible)}>
-        {isVisible ? "Hide" : "View"}
+        {isVisible ? 'Hide' : 'View'}
       </button>
       {isVisible ? (
         <>
