@@ -42,9 +42,18 @@ const Content = ({ parts }) => {
   );
 };
 
-const Total = (props) => {
-  const sum = props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises
-  return <p>Number of exercises {sum}</p>;
+const Total = ({ parts }) => {
+  let sum = 0;
+
+  for (let i = 0; i < parts.length; i++) {
+    sum += parts[i].exercises;
+  }
+
+  return (
+    <p>
+      <strong>total of {sum} exercises</strong>
+    </p>
+  );
 };
 
 const Part = (props) => {
