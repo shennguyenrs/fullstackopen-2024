@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "VITE_APP_STAGE=dev vite",
+    "build:dev": "VITE_APP_STAGE=dev vite build",
+    "build:prod": "VITE_APP_STAGE=prod vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "server": "json-server --watch db.json --port 3001"

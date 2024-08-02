@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const url = "http://localhost:3001/api/persons";
+const url =
+  import.meta.env.VITE_APP_STAGE === "prod"
+    ? "/api/persons"
+    : import.meta.env.VITE_APP_STAGE === "dev"
+      ? "http://localhost:3001/api/persons"
+      : "";
 
 const getAll = () => {
   return axios.get(url);
