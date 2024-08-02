@@ -137,6 +137,26 @@ describe('when deleteting a blog', () => {
   })
 })
 
+describe('when updating a blog', () => {
+  test('succeeds with status code 200 and updated object if id is valid', async () => {
+    const allBlogs = await Blog.find({})
+    const blogToUpdate = allBlogs[0]
+
+    const newBlog = {
+      ...blogToUpdate,
+      likes: 12,
+    }
+
+    const res = await api.put(`/api/blogs/${blogToUpdate.id}`).send(newBlog)
+
+    assert.strictEqual(res.status, 200)
+    assert.strictEqual(res.body.likes, newBlog.likes)
+
+    const res2 = await api.get('/api/blogs')
+    assert.strictEqual(res2.body.length, 6)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
