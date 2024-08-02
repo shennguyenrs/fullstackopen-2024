@@ -43,11 +43,7 @@ const Content = ({ parts }) => {
 };
 
 const Total = ({ parts }) => {
-  let sum = 0;
-
-  for (let i = 0; i < parts.length; i++) {
-    sum += parts[i].exercises;
-  }
+  let sum = parts.reduce((prev, current) => prev + current.exercises, 0);
 
   return (
     <p>
