@@ -1,11 +1,18 @@
 import { useState } from "react";
 
 function App() {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: "040-1234567" },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
-  const handleInputChange = (event) => {
+  const handleInputNamechange = (event) => {
     setNewName(event.target.value);
+  };
+
+  const handleInputNumberchange = (event) => {
+    setNewNumber(event.target.value);
   };
 
   const handleAddNewPerson = (event) => {
@@ -19,10 +26,12 @@ function App() {
     let newPersons = [...persons];
     const newPerson = {
       name: newName,
+      number: newNumber,
     };
     newPersons.push(newPerson);
     setPersons(newPersons);
     setNewName("");
+    setNewNumber("");
   };
 
   return (
@@ -30,7 +39,10 @@ function App() {
       <h2>Phonebook</h2>
       <form>
         <div>
-          name: <input value={newName} onChange={handleInputChange} />
+          name: <input value={newName} onChange={handleInputNamechange} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleInputNumberchange} />
         </div>
         <div>
           <button type="submit" onClick={handleAddNewPerson}>
@@ -40,7 +52,9 @@ function App() {
       </form>
       <h2>Numbers</h2>
       {persons.map((i) => (
-        <p key={i.name}>{i.name} </p>
+        <p key={i.name}>
+          {i.name} {i.number}
+        </p>
       ))}
     </>
   );
