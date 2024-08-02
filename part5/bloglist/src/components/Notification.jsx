@@ -1,11 +1,11 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const Notification = ({ message, variant }) => {
   if (message === null) {
     return null;
   }
 
-  return <div className={variant}>{message}</div>;
+  return <p className={variant}>{message}</p>;
 };
 
 Notification.propTypes = {

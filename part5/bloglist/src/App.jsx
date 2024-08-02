@@ -62,14 +62,16 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      let newBlogs = [...blogs].sort(
-        (a, b) => b.likes - a.likes || b.id - a.id,
-      );
+    if (user) {
+      blogService.getAll().then((blogs) => {
+        let newBlogs = [...blogs].sort(
+          (a, b) => b.likes - a.likes || b.id - a.id,
+        );
 
-      setBlogs(newBlogs);
-    });
-  }, []);
+        setBlogs(newBlogs);
+      });
+    }
+  }, [user]);
 
   if (!user) {
     return (
