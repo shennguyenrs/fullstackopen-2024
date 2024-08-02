@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 
 import FilterForm from "./components/filterForm";
 import PersonForm from "./components/personForm";
 import Persons from "./components/persons";
+import personService from "./services/person";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -46,8 +46,8 @@ function App() {
       number: newNumber,
     };
 
-    axios
-      .post("http://localhost:3001/persons", newPerson)
+    personService
+      .addPerson(newPerson)
       .then((res) => {
         newPersons.push(res.data);
         setPersons(newPersons);
@@ -62,8 +62,8 @@ function App() {
     : persons.filter((i) => i.name.toLowerCase().includes(filterName));
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
+    personService
+      .getAll()
       .then((response) => {
         setPersons(response.data);
       })
