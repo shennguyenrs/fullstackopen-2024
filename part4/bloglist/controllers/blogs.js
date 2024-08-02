@@ -1,15 +1,32 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
-blogRouter.get('/', (req, res, next) => {
-  Blog.find({})
-    .then((blogs) => {
-      res.json(blogs)
+blogRouter.get('/', async (req, res, next) => {
+  try {
+    const result = await Blog.find({}).populate('user', {
+      username: 1,
+      name: 1,
     })
-    .catch((error) => next(error))
+    return res.json(result)
+  } catch (error) {
+    next(error)
+  }
 })
 
-blogRouter.post('/', (req, res, next) => {
+blogRouter.get('/:id', async (req, res, next) => {
+  try {
+    const result = await Blog.findById(req.params.id).populate('user', {
+      username: 1,
+      name: 1,
+    })
+    return res.json(result)
+  } catch (error) {
+    next(error)
+  }
+})
+
+blogRouter.post('/', async (req, res, next) => {
   let body = req.body
 
   if (!body.title || !body.url) {
@@ -22,14 +39,36 @@ blogRouter.post('/', (req, res, next) => {
     body.likes = 0
   }
 
-  const blog = new Blog(body)
+  try {
+    const allUsers = await User.find({})
+    let randomUseId
+    let raw = {
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes,
+    }
 
-  blog
-    .save()
-    .then((result) => {
-      res.status(201).json(result)
-    })
-    .catch((error) => next(error))
+    if (allUsers.length !== 0) {
+      const randomUser = allUsers[Math.floor(Math.random() * allUsers.length)]
+      randomUseId = randomUser._id
+      raw.user = randomUseId
+    }
+
+    const blog = new Blog(raw)
+
+    const savedBlog = await blog.save()
+
+    if (randomUseId) {
+      const user = await User.findById(randomUseId)
+      user.blogs = user.blogs.concat(savedBlog._id)
+      await user.save()
+    }
+
+    res.status(201).json(savedBlog)
+  } catch (error) {
+    next(error)
+  }
 })
 
 blogRouter.delete('/:id', async (req, res, next) => {

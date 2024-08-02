@@ -4,6 +4,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const mongoose = require('mongoose')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
@@ -154,6 +155,50 @@ describe('when updating a blog', () => {
 
     const res2 = await api.get('/api/blogs')
     assert.strictEqual(res2.body.length, 6)
+  })
+})
+
+describe('when post a new blog from exercise 4.17', () => {
+  beforeEach(async () => {
+    const initialUser = [
+      {
+        username: 'admin',
+        name: 'Admin',
+        password: 'admin',
+      },
+    ]
+
+    await User.deleteMany({})
+    await User.insertMany(initialUser)
+  })
+
+  test('add new blog that automatically assign to a user', async () => {
+    const newBlog = {
+      title: 'Title 7',
+      author: 'Author 1',
+      url: 'https://example.com/7',
+      likes: 8,
+    }
+
+    const expectResult = {
+      title: 'Title 7',
+      author: 'Author 1',
+      url: 'https://example.com/7',
+      likes: 8,
+      user: {
+        username: 'admin',
+        name: 'Admin',
+      },
+    }
+
+    const res = await api.post('/api/blogs').send(newBlog)
+    const res2 = await api.get(`/api/blogs/${res.body.id}`)
+    assert.strictEqual(res2.body.title, expectResult.title)
+    assert.strictEqual(res2.body.author, expectResult.author)
+    assert.strictEqual(res2.body.url, expectResult.url)
+    assert.strictEqual(res2.body.likes, expectResult.likes)
+    assert.strictEqual(res2.body.user.username, expectResult.user.username)
+    assert.strictEqual(res2.body.user.name, expectResult.user.name)
   })
 })
 

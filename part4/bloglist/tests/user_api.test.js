@@ -91,6 +91,45 @@ describe('when adding new user with invalid information', () => {
   })
 })
 
+describe('when adding a new post', () => {
+  test('fetch user that contains blog', async () => {
+    const expectResult = {
+      username: 'admin',
+      name: 'Admin',
+      blogs: [
+        {
+          title: 'Title 1',
+          author: 'Author 1',
+          url: 'https://example.com/1',
+          likes: 5,
+        },
+      ],
+    }
+
+    const sampleBlog = {
+      title: 'Title 1',
+      author: 'Author 1',
+      url: 'https://example.com/1',
+      likes: 5,
+    }
+
+    await api.post('/api/blogs').send(sampleBlog)
+
+    const res = await api.get('/api/users')
+
+    assert.strictEqual(res.body.length, 1)
+    assert.strictEqual(res.body[0].username, expectResult.username)
+    assert.strictEqual(res.body[0].name, expectResult.name)
+    assert.strictEqual(res.body[0].blogs.length, 1)
+    assert.strictEqual(res.body[0].blogs[0].title, expectResult.blogs[0].title)
+    assert.strictEqual(
+      res.body[0].blogs[0].author,
+      expectResult.blogs[0].author,
+    )
+    assert.strictEqual(res.body[0].blogs[0].url, expectResult.blogs[0].url)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
