@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import Blog from "./components/Blog";
-import BlogForm from "./components/BlogForm";
-import LoginForm from "./components/LoginForm";
-import blogService from "./services/blogs";
+import Blog from './components/Blog';
+import BlogForm from './components/BlogForm';
+import LoginForm from './components/LoginForm';
+import Notification from './components/Notification';
+import blogService from './services/blogs';
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const [message, setMessage] = useState(null);
+  const [messageVariant, setMessageVariant] = useState('');
 
   const handleLogout = () => {
     window.localStorage.clear();
@@ -15,7 +18,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("user");
+    const loggedUserJSON = window.localStorage.getItem('user');
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
@@ -29,14 +32,25 @@ const App = () => {
   }, []);
 
   if (!user) {
-    return <LoginForm setUser={setUser} />;
+    return (
+      <>
+        <h2>Login to the application</h2>
+        <Notification message={message} variant={messageVariant} />
+        <LoginForm
+          setUser={setUser}
+          setMessage={setMessage}
+          setMessageVariant={setMessageVariant}
+        />
+      </>
+    );
   }
 
   return (
     <>
+      <Notification message={message} variant={messageVariant} />
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
-      <BlogForm />
+      <BlogForm setMessage={setMessage} setMessageVariant={setMessageVariant} />
       <h2>blogs</h2>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
