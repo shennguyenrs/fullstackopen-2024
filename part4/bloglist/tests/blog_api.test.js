@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
 const app = require('../app')
@@ -122,6 +122,19 @@ test('validate post new blog that missing title or url', async () => {
 
   const res4 = await api.get('/api/blogs')
   assert.strictEqual(res4.body.length, 6)
+})
+
+describe('when deleteting a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const allBlogs = await Blog.find({})
+    const blogToDelete = allBlogs[0]
+
+    const res = await api.delete(`/api/blogs/${blogToDelete.id}`)
+    assert.strictEqual(res.status, 204)
+
+    const res2 = await api.get('/api/blogs')
+    assert.strictEqual(res2.body.length, 5)
+  })
 })
 
 after(async () => {
