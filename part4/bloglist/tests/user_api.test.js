@@ -39,6 +39,58 @@ describe('when there is initially one user in database', () => {
   })
 })
 
+describe('when adding new user with invalid information', () => {
+  test('cannot add user with username not unique', async () => {
+    const newUser = {
+      name: 'admin',
+      username: 'admin',
+      password: 'admin',
+    }
+
+    const res = await api.post('/api/users').send(newUser)
+    assert.strictEqual(res.status, 500)
+
+    const res2 = await api.get('/api/users')
+    assert.strictEqual(res2.body.length, 1)
+  })
+
+  test('cannot add user with username length smaller than 3 characters ', async () => {
+    const newUser = {
+      username: 'us',
+      name: 'admin',
+      password: 'admin',
+    }
+
+    const res = await api.post('/api/users').send(newUser)
+    assert.strictEqual(res.status, 400)
+    assert.strictEqual(
+      res.body.error,
+      'User validation failed: username: Username must be at least 3 characters long',
+    )
+
+    const res2 = await api.get('/api/users')
+    assert.strictEqual(res2.body.length, 1)
+  })
+
+  test('cannot add user with password length smaller than 3 characters', async () => {
+    const newUser = {
+      username: 'user',
+      name: 'User',
+      password: 'us',
+    }
+
+    const res = await api.post('/api/users').send(newUser)
+    assert.strictEqual(res.status, 400)
+    assert.strictEqual(
+      res.body.error,
+      'Password must be at least 3 characters long',
+    )
+
+    const res2 = await api.get('/api/users')
+    assert.strictEqual(res2.body.length, 1)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
