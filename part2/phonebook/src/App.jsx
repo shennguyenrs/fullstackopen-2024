@@ -67,7 +67,18 @@ function App() {
               setMessageVariant("");
             }, 4000);
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            console.log(error);
+            setErrMessage(
+              `Information of ${newName} was already removed from server`,
+            );
+            setMessageVariant("error");
+
+            setTimeout(() => {
+              setErrMessage(null);
+              setMessageVariant("");
+            }, 4000);
+          });
       }
 
       return;
