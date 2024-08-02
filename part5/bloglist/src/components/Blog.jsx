@@ -23,7 +23,7 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
       {isVisible ? (
         <>
           <p>{blog.url}</p>
-          <p>
+          <p className="likes">
             {blog.likes} likes
             <button onClick={() => handleLike(blog)}>Like</button>
           </p>

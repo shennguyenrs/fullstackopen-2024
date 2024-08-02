@@ -39,7 +39,7 @@ describe('blog app', () => {
     });
   });
 
-  describe("when logged in", () => {
+  describe('when logged in', () => {
     beforeEach(() => {
       cy.get('input[name="username"]').type('admin');
       cy.get('input[name="password"]').type('adminpassword');
@@ -47,19 +47,39 @@ describe('blog app', () => {
       cy.get('p').contains('Admin logged in').should('be.visible');
     });
 
-    it("a new blog can be created", () => {
+    it('a new blog can be created', () => {
       cy.get('button').contains('New blog').click();
       cy.get('input[name="title"]').type('Title 1');
       cy.get('input[name="author"]').type('Author 1');
       cy.get('input[name="url"]').type('https://example.com/1');
       cy.get('button').contains('Create').click();
 
-      cy.get('p.success').contains('A new blog Title 1 by Author 1 added').should('be.visible');
+      cy.get('p.success')
+        .contains('A new blog Title 1 by Author 1 added')
+        .should('be.visible');
       cy.get('.success').should('have.css', 'color', 'rgb(0, 128, 0)');
 
-      cy.reload()
+      cy.reload();
 
       cy.get('p.title').contains('Title 1 Author 1').should('be.visible');
-    })
-  })
+    });
+
+    it('a blog can be liked', () => {
+      cy.get('button').contains('New blog').click();
+      cy.get('input[name="title"]').type('Title 1');
+      cy.get('input[name="author"]').type('Author 1');
+      cy.get('input[name="url"]').type('https://example.com/1');
+      cy.get('button').contains('Create').click();
+
+      cy.reload();
+
+      cy.get('button').contains('View').click();
+      cy.get('button').contains('Like').click();
+
+      cy.reload();
+
+      cy.get('button').contains('View').click();
+      cy.get('p.likes').contains('1 likes').should('be.visible');
+    });
+  });
 });
