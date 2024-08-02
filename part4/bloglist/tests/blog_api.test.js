@@ -82,6 +82,20 @@ test('validate post method', async () => {
   assert.strictEqual(res2.body.length, 7)
 })
 
+test('validate default value of likes', async () => {
+  const newBlog = {
+    title: 'Title 7',
+    author: 'Author 1',
+    url: 'https://example.com/7',
+  }
+
+  const res = await api.post('/api/blogs').send(newBlog)
+  assert.strictEqual(res.body.likes, 0)
+
+  const res2 = await api.get('/api/blogs')
+  assert.strictEqual(res2.body.length, 7)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
