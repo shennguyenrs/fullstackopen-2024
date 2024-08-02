@@ -91,7 +91,7 @@ const App = () => {
     <>
       <Notification message={message} variant={messageVariant} />
       <p>{user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
+      <button onClick={handleLogout}>Logout</button>
       {isVisible ? (
         <>
           <BlogForm handleSaveBlog={handleSaveBlog} />
@@ -107,6 +107,7 @@ const App = () => {
           blog={blog}
           handleLike={handleLike}
           handleDelete={handleDelete}
+          user={user}
         />
       ))}
     </>

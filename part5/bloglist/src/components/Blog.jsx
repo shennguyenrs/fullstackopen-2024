@@ -9,8 +9,9 @@ const blogStyle = {
   marginBottom: 5,
 };
 
-const Blog = ({ blog, handleLike, handleDelete }) => {
+const Blog = ({ blog, handleLike, handleDelete, user }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const isShownDeleteBtn = blog.user.username === user.username;
 
   return (
     <div style={blogStyle}>
@@ -28,7 +29,9 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
             <button onClick={() => handleLike(blog)}>Like</button>
           </p>
           <p>{blog.user.name}</p>
-          <button onClick={() => handleDelete(blog)}>Delete</button>
+          {isShownDeleteBtn ? (
+            <button onClick={() => handleDelete(blog)}>Delete</button>
+          ) : null}
         </>
       ) : null}
     </div>
@@ -39,6 +42,7 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default Blog;

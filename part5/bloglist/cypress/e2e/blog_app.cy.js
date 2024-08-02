@@ -8,7 +8,14 @@ describe('blog app', () => {
       password: 'adminpassword',
     };
 
+    const user2 = {
+      name: 'Tester',
+      username: 'tester',
+      password: 'testerpassword',
+    };
+
     cy.request('POST', 'http://localhost:3001/api/users', user);
+    cy.request('POST', 'http://localhost:3001/api/users', user2);
 
     cy.visit('http://localhost:5173');
   });
@@ -97,6 +104,23 @@ describe('blog app', () => {
       cy.reload();
 
       cy.contains('Title 1 Author 1').should('not.exist');
+    });
+
+    it('delete button is only shown for its creator', () => {
+      cy.get('button').contains('New blog').click();
+      cy.get('input[name="title"]').type('Title 1');
+      cy.get('input[name="author"]').type('Author 1');
+      cy.get('input[name="url"]').type('https://example.com/1');
+      cy.get('button').contains('Create').click();
+
+      cy.get('button').contains('Logout').click();
+
+      cy.get('input[name="username"]').type('tester');
+      cy.get('input[name="password"]').type('testerpassword');
+      cy.get('button').contains('Login').click();
+
+      cy.get('button').contains('View').click();
+      cy.get('button').contains('Delete').should('not.exist');
     });
   });
 });
