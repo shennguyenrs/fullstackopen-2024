@@ -30,15 +30,9 @@ const Header = (props) => {
 const Content = (props) => {
   return (
     <div>
-      <p>
-        {props.part1} {props.exercises1}
-      </p>
-      <p>
-        {props.part2} {props.exercises2}
-      </p>
-      <p>
-        {props.part3} {props.exercises3}
-      </p>
+      <Part title={props.part1} exercises={props.exercises1} />
+      <Part title={props.part2} exercises={props.exercises2} />
+      <Part title={props.part3} exercises={props.exercises3} />
     </div>
   );
 };
@@ -46,5 +40,13 @@ const Content = (props) => {
 const Total = (props) => {
   return <p>Number of exercises {props.sum}</p>;
 };
+
+const Part = (props) => {
+  return (
+    <p>
+      {props.title} {props.exercises}
+    </p>
+  )
+}
 
 export default App;
