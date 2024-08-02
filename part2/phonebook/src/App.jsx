@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import FilterForm from "./components/filterForm";
+import Notification from "./components/notification";
 import PersonForm from "./components/personForm";
 import Persons from "./components/persons";
 import personService from "./services/person";
@@ -11,6 +12,8 @@ function App() {
   const [newNumber, setNewNumber] = useState("");
   const [showAll, setShowAll] = useState(true);
   const [filterName, setFilterName] = useState("");
+  const [errMessage, setErrMessage] = useState(null);
+  const [messageVariant, setMessageVariant] = useState("");
 
   const handleInputNamechange = (event) => {
     setNewName(event.target.value);
@@ -45,13 +48,26 @@ function App() {
           number: newNumber,
         };
 
-        personService.updatePerson(foundPerson.id, newPerson).then((res) => {
-          let newPersons = [...persons].filter((i) => i.id !== foundPerson.id);
-          newPersons.push(res.data);
-          setPersons(newPersons);
-          setNewName("");
-          setNewNumber("");
-        }).catch((error) => console.log(error));
+        personService
+          .updatePerson(foundPerson.id, newPerson)
+          .then((res) => {
+            let newPersons = [...persons].filter(
+              (i) => i.id !== foundPerson.id,
+            );
+            newPersons.push(res.data);
+            setPersons(newPersons);
+            setNewName("");
+            setNewNumber("");
+
+            setErrMessage(`Update ${newName} with new phone number`);
+            setMessageVariant("success");
+
+            setTimeout(() => {
+              setErrMessage(null);
+              setMessageVariant("");
+            }, 4000);
+          })
+          .catch((error) => console.log(error));
       }
 
       return;
@@ -72,6 +88,14 @@ function App() {
         setPersons(newPersons);
         setNewName("");
         setNewNumber("");
+
+        setErrMessage(`Added ${newName}`);
+        setMessageVariant("success");
+
+        setTimeout(() => {
+          setErrMessage(null);
+          setMessageVariant("");
+        }, 4000);
       })
       .catch((error) => console.log(error));
   };
@@ -108,6 +132,7 @@ function App() {
   return (
     <>
       <h2>Phonebook</h2>
+      <Notification message={errMessage} variant={messageVariant} />
       <FilterForm
         filterName={filterName}
         handleFilterNamechange={handleFilterNamechange}
