@@ -9,7 +9,7 @@ import blogService from "./services/blogs";
 const App = () => {
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("");
   const [messageVariant, setMessageVariant] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 

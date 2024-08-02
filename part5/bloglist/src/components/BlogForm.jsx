@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 import blogService from "../services/blogs";
 
@@ -68,6 +69,12 @@ const BlogForm = ({ setMessage, setMessageVariant, setIsVisible }) => {
       </form>
     </>
   );
+};
+
+BlogForm.propTypes = {
+  setMessage: PropTypes.func.isRequired,
+  setMessageVariant: PropTypes.func.isRequired,
+  setIsVisible: PropTypes.func.isRequired,
 };
 
 export default BlogForm;
