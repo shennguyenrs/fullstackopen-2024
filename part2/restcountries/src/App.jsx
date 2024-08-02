@@ -26,6 +26,11 @@ function App() {
     }
   };
 
+  const handleShowCountry = (idx) => {
+    setFound([found[idx]]);
+    setSearchTerm(found[idx].name.common);
+  };
+
   // Get countries at initial render
   useEffect(() => {
     axios
@@ -42,12 +47,12 @@ function App() {
     <>
       <p>Find country</p>
       <input value={searchTerm} onChange={handleSearch} />
-      <DisplayFound data={found} />
+      <DisplayFound data={found} handleShowCountry={handleShowCountry} />
     </>
   );
 }
 
-const DisplayFound = ({ data }) => {
+const DisplayFound = ({ data, handleShowCountry }) => {
   if (data.length > 10) {
     return <p>Too many matches, specify another filter</p>;
   }
@@ -71,8 +76,11 @@ const DisplayFound = ({ data }) => {
 
   return (
     <div>
-      {data.map((country) => (
-        <p key={country.name.common}>{country.name.common}</p>
+      {data.map((country, idx) => (
+        <div key={idx}>
+          <p>{country.name.common}</p>
+          <button onClick={() => handleShowCountry(idx)}>Show</button>
+        </div>
       ))}
     </div>
   );
