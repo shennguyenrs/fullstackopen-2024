@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import blogService from '../services/blogs';
-
 const blogStyle = {
   paddingTop: 10,
   paddingLeft: 2,
@@ -11,19 +9,8 @@ const blogStyle = {
   marginBottom: 5,
 };
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike, handleDelete }) => {
   const [isVisible, setIsVisible] = useState(false);
-
-  const handleLike = async () => {
-    const likedBlog = { ...blog, likes: blog.likes + 1 };
-    await blogService.update(blog.id, likedBlog);
-  };
-
-  const handleDelete = async () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.deleteBlog(blog.id);
-    }
-  };
 
   return (
     <div style={blogStyle}>
@@ -38,10 +25,10 @@ const Blog = ({ blog }) => {
           <p>{blog.url}</p>
           <p>
             {blog.likes} likes
-            <button onClick={handleLike}>Like</button>
+            <button onClick={() => handleLike(blog)}>Like</button>
           </p>
           <p>{blog.user.name}</p>
-          <button onClick={handleDelete}>Delete</button>
+          <button onClick={() => handleDelete(blog)}>Delete</button>
         </>
       ) : null}
     </div>
@@ -50,6 +37,8 @@ const Blog = ({ blog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 export default Blog;

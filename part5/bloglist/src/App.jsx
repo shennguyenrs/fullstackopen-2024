@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import Blog from "./components/Blog";
-import BlogForm from "./components/BlogForm";
-import LoginForm from "./components/LoginForm";
-import Notification from "./components/Notification";
-import blogService from "./services/blogs";
+import Blog from './components/Blog';
+import BlogForm from './components/BlogForm';
+import LoginForm from './components/LoginForm';
+import Notification from './components/Notification';
+import blogService from './services/blogs';
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
-  const [message, setMessage] = useState("");
-  const [messageVariant, setMessageVariant] = useState("");
+  const [message, setMessage] = useState('');
+  const [messageVariant, setMessageVariant] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
   const handleLogout = () => {
@@ -18,8 +18,19 @@ const App = () => {
     setUser(null);
   };
 
+  const handleLike = async (blog) => {
+    const likedBlog = { ...blog, likes: blog.likes + 1 };
+    await blogService.update(blog.id, likedBlog);
+  };
+
+  const handleDelete = async (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.deleteBlog(blog.id);
+    }
+  };
+
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("user");
+    const loggedUserJSON = window.localStorage.getItem('user');
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
@@ -71,7 +82,12 @@ const App = () => {
       )}
       <h2>blogs</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleLike={handleLike}
+          handleDelete={handleDelete}
+        />
       ))}
     </>
   );
