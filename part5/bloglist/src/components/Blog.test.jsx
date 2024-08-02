@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { test, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import Blog from '../components/Blog';
+import BlogForm from '../components/BlogForm';
 
 const blog = {
   title: 'Title 1',
@@ -46,4 +47,31 @@ test('clicking like button twice and event handler call twice', async () => {
   await user.click(likeBtn);
 
   expect(mockHandler.mock.calls).toHaveLength(2);
+});
+
+test('clicking add new blog', async () => {
+  const mockHandler = vi.fn((e) => {
+    e.preventDefault();
+  });
+
+  render(<BlogForm handleSaveBlog={mockHandler} />);
+
+  const user = userEvent.setup();
+  const titleInput = screen.getByRole('textbox', { name: 'Title:' });
+  const authorInput = screen.getByRole('textbox', { name: 'Author:' });
+  const urlInput = screen.getByRole('textbox', { name: 'URL:' });
+
+  await user.type(titleInput, 'Title 1');
+  await user.type(authorInput, 'Author 1');
+  await user.type(urlInput, 'https://example.com/1');
+
+  const submitBtn = screen.getByText('Create');
+  await user.click(submitBtn);
+
+  expect(mockHandler.mock.calls).toHaveLength(1);
+  expect(mockHandler.mock.calls[0][1]).toEqual({
+    title: 'Title 1',
+    author: 'Author 1',
+    url: 'https://example.com/1',
+  });
 });

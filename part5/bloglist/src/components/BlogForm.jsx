@@ -1,40 +1,19 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-import blogService from "../services/blogs";
-
-const BlogForm = ({ setMessage, setMessageVariant, setIsVisible }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+const BlogForm = ({ handleSaveBlog }) => {
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
 
   const handleInputTitle = (e) => setTitle(e.target.value);
   const handleInputAuthor = (e) => setAuthor(e.target.value);
   const handleInputUrl = (e) => setUrl(e.target.value);
 
-  const handleSaveBlog = async (e) => {
-    e.preventDefault();
-
-    const blog = { title, author, url };
-    const res = await blogService.create(blog);
-
-    if (res) {
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-
-      setMessage(`A new blog ${blog.title} by ${blog.author} added`);
-      setMessageVariant("success");
-      setIsVisible(false);
-    } else {
-      setMessage("Something went wrong");
-      setMessageVariant("error");
-    }
-
-    setTimeout(() => {
-      setMessage("");
-      setMessageVariant("");
-    }, 5000);
+  const handleClearForm = () => {
+    setTitle('');
+    setAuthor('');
+    setUrl('');
   };
 
   return (
@@ -42,8 +21,9 @@ const BlogForm = ({ setMessage, setMessageVariant, setIsVisible }) => {
       <h2>Add a new blog</h2>
       <form>
         <div>
-          <label>title:</label>
+          <label htmlFor="title">Title:</label>
           <input
+            id="title"
             type="text"
             name="title"
             value={title}
@@ -51,8 +31,9 @@ const BlogForm = ({ setMessage, setMessageVariant, setIsVisible }) => {
           />
         </div>
         <div>
-          <label>author:</label>
+          <label htmlFor="author">Author:</label>
           <input
+            id="author"
             type="text"
             name="author"
             value={author}
@@ -60,11 +41,22 @@ const BlogForm = ({ setMessage, setMessageVariant, setIsVisible }) => {
           />
         </div>
         <div>
-          <label>url:</label>
-          <input type="text" name="url" value={url} onChange={handleInputUrl} />
+          <label htmlFor="url">URL:</label>
+          <input
+            id="url"
+            type="text"
+            name="url"
+            value={url}
+            onChange={handleInputUrl}
+          />
         </div>
-        <button type="submit" onClick={handleSaveBlog}>
-          create
+        <button
+          type="submit"
+          onClick={(e) =>
+            handleSaveBlog(e, { title, author, url }, handleClearForm)
+          }
+        >
+          Create
         </button>
       </form>
     </>
@@ -72,9 +64,7 @@ const BlogForm = ({ setMessage, setMessageVariant, setIsVisible }) => {
 };
 
 BlogForm.propTypes = {
-  setMessage: PropTypes.func.isRequired,
-  setMessageVariant: PropTypes.func.isRequired,
-  setIsVisible: PropTypes.func.isRequired,
+  handleSaveBlog: PropTypes.func.isRequired,
 };
 
 export default BlogForm;

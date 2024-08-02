@@ -29,6 +29,28 @@ const App = () => {
     }
   };
 
+  const handleSaveBlog = async (e, { title, author, url }, handleClearForm) => {
+    e.preventDefault();
+
+    const blog = { title, author, url };
+    const res = await blogService.create(blog);
+
+    if (res) {
+      handleClearForm();
+      setMessage(`A new blog ${blog.title} by ${blog.author} added`);
+      setMessageVariant('success');
+      setIsVisible(false);
+    } else {
+      setMessage('Something went wrong');
+      setMessageVariant('error');
+    }
+
+    setTimeout(() => {
+      setMessage('');
+      setMessageVariant('');
+    }, 5000);
+  };
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('user');
 
@@ -70,11 +92,7 @@ const App = () => {
       <button onClick={handleLogout}>logout</button>
       {isVisible ? (
         <>
-          <BlogForm
-            setMessage={setMessage}
-            setMessageVariant={setMessageVariant}
-            setIsVisible={setIsVisible}
-          />
+          <BlogForm handleSaveBlog={handleSaveBlog} />
           <button onClick={() => setIsVisible(false)}>Cancel</button>
         </>
       ) : (
