@@ -45,10 +45,16 @@ function App() {
       name: newName,
       number: newNumber,
     };
-    newPersons.push(newPerson);
-    setPersons(newPersons);
-    setNewName("");
-    setNewNumber("");
+
+    axios
+      .post("http://localhost:3001/persons", newPerson)
+      .then((res) => {
+        newPersons.push(res.data);
+        setPersons(newPersons);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => console.log(error));
   };
 
   const personsToShow = showAll
