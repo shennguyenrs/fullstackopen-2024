@@ -12,6 +12,12 @@ blogRouter.get('/', (req, res, next) => {
 blogRouter.post('/', (req, res, next) => {
   let body = req.body
 
+  if (!body.title || !body.url) {
+    return res.status(400).json({
+      error: 'Title or url missing',
+    })
+  }
+
   if (!body.likes) {
     body.likes = 0
   }

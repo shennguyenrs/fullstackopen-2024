@@ -96,6 +96,34 @@ test('validate default value of likes', async () => {
   assert.strictEqual(res2.body.length, 7)
 })
 
+test('validate post new blog that missing title or url', async () => {
+  const blogMissTitle = {
+    author: 'Author 1',
+    url: 'https://example.com/7',
+    likes: 8,
+  }
+
+  const blogMissUrl = {
+    title: 'Title 7',
+    author: 'Author 1',
+    likes: 8,
+  }
+
+  const res = await api.post('/api/blogs').send(blogMissTitle)
+  assert.strictEqual(res.status, 400)
+  assert.strictEqual(res.body.error, 'Title or url missing')
+
+  const res2 = await api.get('/api/blogs')
+  assert.strictEqual(res2.body.length, 6)
+
+  const res3 = await api.post('/api/blogs').send(blogMissUrl)
+  assert.strictEqual(res3.status, 400)
+  assert.strictEqual(res3.body.error, 'Title or url missing')
+
+  const res4 = await api.get('/api/blogs')
+  assert.strictEqual(res4.body.length, 6)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
