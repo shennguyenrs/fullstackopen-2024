@@ -1,3 +1,5 @@
+import Course from "./components/course"
+
 const App = () => {
   const courses = [
     {
@@ -49,48 +51,6 @@ const App = () => {
       {courses.map((i) => (
         <Course key={i.id} course={i} />
       ))}
-    </>
-  );
-};
-
-const Header = (props) => {
-  return <h1>{props.course}</h1>;
-};
-
-const Content = ({ parts }) => {
-  return (
-    <>
-      {parts.map((i) => (
-        <Part key={i.id} name={i.name} exercises={i.exercises} />
-      ))}
-    </>
-  );
-};
-
-const Total = ({ parts }) => {
-  let sum = parts.reduce((prev, current) => prev + current.exercises, 0);
-
-  return (
-    <p>
-      <strong>total of {sum} exercises</strong>
-    </p>
-  );
-};
-
-const Part = (props) => {
-  return (
-    <p>
-      {props.name} {props.exercises}
-    </p>
-  );
-};
-
-const Course = ({ course }) => {
-  return (
-    <>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
     </>
   );
 };
