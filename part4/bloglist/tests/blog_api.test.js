@@ -63,6 +63,25 @@ test('validate if the return object having id in the property', async () => {
   assert.ok(res.body[0].id)
 })
 
+test('validate post method', async () => {
+  const newBlog = {
+    title: 'Title 7',
+    author: 'Author 1',
+    url: 'https://example.com/7',
+    likes: 8,
+  }
+
+  const res = await api.post('/api/blogs').send(newBlog)
+
+  assert.strictEqual(res.body.title, newBlog.title)
+  assert.strictEqual(res.body.author, newBlog.author)
+  assert.strictEqual(res.body.url, newBlog.url)
+  assert.strictEqual(res.body.likes, newBlog.likes)
+
+  const res2 = await api.get('/api/blogs')
+  assert.strictEqual(res2.body.length, 7)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
