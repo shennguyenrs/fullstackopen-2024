@@ -122,5 +122,37 @@ describe('blog app', () => {
       cy.get('button').contains('View').click();
       cy.get('button').contains('Delete').should('not.exist');
     });
+
+    it('blogs are ordered by the number of likes', () => {
+      cy.get('button').contains('New blog').click();
+      cy.get('input[name="title"]').type('Title 1');
+      cy.get('input[name="author"]').type('Author 1');
+      cy.get('input[name="url"]').type('https://example.com/1');
+      cy.get('button').contains('Create').click();
+
+      cy.get('button').contains('New blog').click();
+      cy.get('input[name="title"]').type('Title 2');
+      cy.get('input[name="author"]').type('Author 2');
+      cy.get('input[name="url"]').type('https://example.com/2');
+      cy.get('button').contains('Create').click();
+
+      cy.reload();
+
+      cy.get('button:contains("View")').eq(0).click();
+      cy.get('button:contains("Like")').eq(0).click();
+
+      cy.get('button:contains("View")').eq(0).click();
+      cy.get('button:contains("Like")').eq(1).click();
+
+      cy.reload();
+
+      cy.get('button:contains("View")').eq(1).click();
+      cy.get('button:contains("Like")').eq(0).click();
+
+      cy.reload();
+
+      cy.get('p.title').eq(0).should('contain', 'Title 2 Author 2');
+      cy.get('p.title').eq(1).should('contain', 'Title 1 Author 1');
+    });
   });
 });
