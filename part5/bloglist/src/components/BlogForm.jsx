@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import blogService from "../services/blogs";
 
-const BlogForm = ({ setMessage, setMessageVariant }) => {
+const BlogForm = ({ setMessage, setMessageVariant, setIsVisible }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -24,6 +24,7 @@ const BlogForm = ({ setMessage, setMessageVariant }) => {
 
       setMessage(`A new blog ${blog.title} by ${blog.author} added`);
       setMessageVariant("success");
+      setIsVisible(false);
     } else {
       setMessage("Something went wrong");
       setMessageVariant("error");
