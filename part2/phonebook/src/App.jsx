@@ -32,9 +32,28 @@ function App() {
 
   const handleAddNewPerson = (event) => {
     event.preventDefault();
+    const foundPerson = persons.find((i) => i.name === newName);
 
-    if (persons.find((i) => i.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+    if (foundPerson) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`,
+        )
+      ) {
+        const newPerson = {
+          ...foundPerson,
+          number: newNumber,
+        };
+
+        personService.updatePerson(foundPerson.id, newPerson).then((res) => {
+          let newPersons = [...persons].filter((i) => i.id !== foundPerson.id);
+          newPersons.push(res.data);
+          setPersons(newPersons);
+          setNewName("");
+          setNewNumber("");
+        }).catch((error) => console.log(error));
+      }
+
       return;
     }
 
@@ -61,10 +80,13 @@ function App() {
     event.preventDefault();
 
     if (window.confirm(`Delete ${name}?`)) {
-      personService.deletePerson(id).then(() => {
-        const newPersons = [...persons].filter((i) => i.id !== id);
-        setPersons(newPersons);
-      }).catch(error => console.log(error));
+      personService
+        .deletePerson(id)
+        .then(() => {
+          const newPersons = [...persons].filter((i) => i.id !== id);
+          setPersons(newPersons);
+        })
+        .catch((error) => console.log(error));
     }
   };
 
