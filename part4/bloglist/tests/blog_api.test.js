@@ -58,6 +58,11 @@ test('count blogs in test env return as 6', async () => {
   assert.strictEqual(res.body.length, 6)
 })
 
+test('validate if the return object having id in the property', async () => {
+  const res = await api.get('/api/blogs')
+  assert.ok(res.body[0].id)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
