@@ -108,7 +108,11 @@ function App() {
           setMessageVariant("");
         }, 4000);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        const errorMessage = error.response.data.error;
+        setErrMessage(errorMessage);
+        setMessageVariant("error");
+      });
   };
 
   const handleDeletePerson = (event, name, id) => {
@@ -121,7 +125,11 @@ function App() {
           const newPersons = [...persons].filter((i) => i.id !== id);
           setPersons(newPersons);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          const errorMessage = error.response.data.error;
+          setErrMessage(errorMessage);
+          setMessageVariant("error");
+        });
     }
   };
 
@@ -136,7 +144,9 @@ function App() {
         setPersons(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        const errorMessage = error.response.data.error;
+        setErrMessage(errorMessage);
+        setMessageVariant("error");
       });
   }, []);
 
