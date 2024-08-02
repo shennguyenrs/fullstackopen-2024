@@ -29,7 +29,13 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      let newBlogs = [...blogs].sort(
+        (a, b) => b.likes - a.likes || b.id - a.id,
+      );
+
+      setBlogs(newBlogs);
+    });
   }, []);
 
   if (!user) {
