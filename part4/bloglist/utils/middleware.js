@@ -5,7 +5,7 @@ morgan.token('body', (req) => {
 })
 
 const logger = morgan(
-  ':method :url :status :res[content-length] - :response-time ms :body'
+  ':method :url :status :res[content-length] - :response-time ms :body',
 )
 
 const unknownEndpoint = (req, res) => {
@@ -21,6 +21,18 @@ const errorHandler = (error, req, res, next) => {
 
   if (error.name === 'ValidationError') {
     return res.status(400).json({ error: error.message })
+  }
+
+  if (error.name === 'JsonWebTokenError') {
+    return res.status(401).json({
+      error: 'Invalid token',
+    })
+  }
+
+  if (error.name === 'TokenExpiredError') {
+    return res.status(401).json({
+      error: 'Token expired',
+    })
   }
 
   next(error)
