@@ -18,6 +18,7 @@ const LoginForm = ({ setUser }) => {
       setUser(user);
       setUsername("");
       setPassword("");
+      window.localStorage.setItem("user", JSON.stringify(user));
     }
   };
 
